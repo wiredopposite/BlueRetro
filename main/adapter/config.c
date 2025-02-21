@@ -15,6 +15,7 @@
 #include "system/fs.h"
 #include "adapter/gameid.h"
 #include "bluetooth/mon.h"
+#include "sdkconfig.h"
 
 struct config config;
 struct hw_config hw_config = {
@@ -30,8 +31,13 @@ struct hw_config hw_config = {
     .led_pulse_fade_cycle_delay_ms = 500,
     .led_pulse_fade_time_ms = 500,
     .led_pulse_hz = 5000,
+#if defined(CONFIG_BLUERETRO_LED_ACTIVE_HIGH)
+    .led_pulse_off_duty_cycle = 0x1FFF,
+    .led_pulse_on_duty_cycle = 0,
+#else
     .led_pulse_off_duty_cycle = 0,
     .led_pulse_on_duty_cycle = 0x1FFF,
+#endif
     .port_cnt = 2,
     .ports_sense_input_polarity = 0,
     .ports_sense_output_ms = 1000,

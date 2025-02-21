@@ -1,3 +1,6 @@
 [submodule "components/queue_bss/liblfds"]
 	path = components/queue_bss/liblfds
 	url = https://github.com/darthcloud/liblfds7.1.1.git
+[submodule "external/esp-idf"]
+	path = external/esp-idf
+	url = https://github.com/espressif/esp-idf.git

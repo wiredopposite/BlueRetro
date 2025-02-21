@@ -14,6 +14,7 @@ set(srcs
     "adapter/wired/saturn.c"
     "adapter/wired/pce.c"
     "adapter/wired/genesis.c"
+    "adapter/wired/generic.c"
     "adapter/wired/real.c"
     "adapter/wired/jag.c"
     "adapter/wired/pcfx.c"
@@ -82,6 +83,8 @@ set(srcs
     "wired/jag_io.c"
     "wired/sea_io.c"
     "wired/wii_i2c.c"
+    "wired/generic_i2c.c"
+    "wired/generic_spi.c"
     "zephyr/atomic.S"
 )
 

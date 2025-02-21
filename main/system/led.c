@@ -11,11 +11,18 @@
 #include "driver/ledc.h"
 #include "adapter/config.h"
 #include "led.h"
+#include "sdkconfig.h"
 
 #ifdef CONFIG_BLUERETRO_SYSTEM_SEA_BOARD
 #define ERR_LED_PIN 32
 #else
+
+#if defined(CONFIG_BLUERETRO_CHIP_ESP32MINI)
+#define ERR_LED_PIN 15
+#else
 #define ERR_LED_PIN 17
+#endif
+
 #endif
 #define PICO_ERR_LED_PIN 20
 

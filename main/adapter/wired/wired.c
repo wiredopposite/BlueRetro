@@ -10,6 +10,7 @@
 #include "npiso.h"
 #include "cdi.h"
 #include "genesis.h"
+#include "generic.h"
 #include "pce.h"
 #include "real.h"
 #include "jag.h"
@@ -51,6 +52,8 @@ static from_generic_t from_generic_func[WIRED_MAX] = {
     para_1p_from_generic, /* PARALLEL_1P_OD */
     para_2p_from_generic, /* PARALLEL_2P_OD */
     sea_from_generic, /* SEA_BOARD */
+    gen_from_generic, /* GENERIC I2C */
+    gen_from_generic, /* GENERIC SPI */
 };
 
 static fb_to_generic_t fb_to_generic_func[WIRED_MAX] = {
@@ -78,6 +81,8 @@ static fb_to_generic_t fb_to_generic_func[WIRED_MAX] = {
     NULL, /* PARALLEL_1P_OD */
     NULL, /* PARALLEL_2P_OD */
     NULL, /* SEA_BOARD */
+    gen_fb_to_generic, /* GENERIC I2C */
+    gen_fb_to_generic, /* GENERIC SPI */
 };
 
 static meta_init_t meta_init_func[WIRED_MAX] = {
@@ -105,6 +110,8 @@ static meta_init_t meta_init_func[WIRED_MAX] = {
     para_1p_meta_init, /* PARALLEL_1P_OD */
     para_2p_meta_init, /* PARALLEL_2P_OD */
     sea_meta_init, /* SEA_BOARD */
+    gen_meta_init, /* GENERIC I2C */
+    gen_meta_init, /* GENERIC SPI */
 };
 
 static DRAM_ATTR buffer_init_t buffer_init_func[WIRED_MAX] = {
@@ -132,6 +139,8 @@ static DRAM_ATTR buffer_init_t buffer_init_func[WIRED_MAX] = {
     para_1p_init_buffer, /* PARALLEL_1P_OD */
     para_2p_init_buffer, /* PARALLEL_2P_OD */
     sea_init_buffer, /* SEA_BOARD */
+    gen_init_buffer, /* GENERIC I2C */
+    gen_init_buffer, /* GENERIC SPI */
 };
 
 int32_t wired_meta_init(struct wired_ctrl *ctrl_data) {

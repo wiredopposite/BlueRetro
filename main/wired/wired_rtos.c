@@ -36,6 +36,8 @@ static const wired_init_t wired_init[WIRED_MAX] = {
     parallel_io_init, /* PARALLEL_1P_OD */
     parallel_io_init, /* PARALLEL_2P_OD */
     sea_init, /* SEA_BOARD */
+    NULL, /* GENERIC I2C */
+    NULL, /* GENERIC SPI */
 };
 
 void wired_rtos_init(void) {

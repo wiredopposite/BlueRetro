@@ -2,5 +2,9 @@
 # CMakeLists in this exact order for cmake to work correctly
 cmake_minimum_required(VERSION 3.5)
 
+set(EXTERNAL_DIR ${CMAKE_CURRENT_LIST_DIR}/external)
+execute_process(COMMAND git checkout "030c995" WORKING_DIRECTORY ${EXTERNAL_DIR}/esp-idf)
+execute_process(COMMAND git submodule update --init --recursive WORKING_DIRECTORY ${EXTERNAL_DIR})
+
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
 project("BlueRetro$ENV{BR_HW}$ENV{BR_SYS}")

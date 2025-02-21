@@ -6,6 +6,24 @@ menu "BlueRetro"
         help
             Select this to enable HW2 features like port detection.
 
+    choice 
+        prompt "Select ESP32 Chip"
+        default BLUERETRO_CHIP_ESP32
+        help
+            Select the ESP32 chip you are using.
+
+        config BLUERETRO_CHIP_ESP32
+            bool "ESP32 (ESP32D0WDQ6)"
+            help
+                Select this if you are using ESP32 (ESP32D0WDQ6).
+        
+        config BLUERETRO_CHIP_ESP32MINI
+            bool "ESP32 Mini (ESP32U4WDH)"
+            help
+                Select this if you are using ESP32 Mini (ESP32U4WDH).
+
+    endchoice
+
     choice
         prompt "Select universal or specific system"
         default BLUERETRO_SYSTEM_UNIVERSAL
@@ -17,6 +35,16 @@ menu "BlueRetro"
             bool "UNIVERSAL"
             help
                 Select this to support all systems.
+
+        config BLUERETRO_SYSTEM_GENERIC_I2C
+            bool "GENERIC_I2C"
+            help
+                Select this for generic gamepad reports via I2C.
+
+        config BLUERETRO_SYSTEM_GENERIC_SPI
+            bool "GENERIC_SPI"
+            help
+                Select this for generic gamepad reports via SPI.
 
         config BLUERETRO_SYSTEM_PARALLEL_1P
             bool "PARALLEL_1P_PP"
@@ -127,6 +155,24 @@ menu "BlueRetro"
             bool "SEA Board"
             help
                 Select this to support only SEA Board.
+
+    endchoice
+
+    choice 
+        prompt "LED Polarity"
+        default BLUERETRO_LED_ACTIVE_LOW
+        help
+            Select the LED polarity.
+
+        config BLUERETRO_LED_ACTIVE_LOW
+            bool "Active low"
+            help
+                Select this if you are using active low LED.
+        
+        config BLUERETRO_LED_ACTIVE_HIGH
+            bool "Active high"
+            help
+                Select this if you are using active high LED.
 
     endchoice
 

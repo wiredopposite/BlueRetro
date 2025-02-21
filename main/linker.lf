@@ -23,4 +23,6 @@ entries:
     pce_io (noflash)
     jag_io (noflash)
     wii_i2c (noflash)
+    generic_i2c (noflash)
+    generic_spi (noflash)
     devcrypto (noflash)

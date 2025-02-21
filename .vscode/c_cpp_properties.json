@@ -6,19 +6,19 @@
         "cppStandard": "c++17",
         "includePath": [
           "${workspaceFolder}/build/config",
-          "${workspaceFolder}/../esp-idf/components/**",
+          "${workspaceFolder}/external/esp-idf/components/**",
           "${workspaceFolder}/**"
         ],
         "defines": ["BLUERETRO", "XT_INTEXC_HOOKS"],
         "browse": {
           "path": [
             "${workspaceFolder}/build/config",
-            "${workspaceFolder}/../esp-idf/components/**",
+            "${workspaceFolder}/external/esp-idf/components/**",
             "${workspaceFolder}/**"
           ],
           "limitSymbolsToIncludedHeaders": false
         },
-        "compilerPath": "${workspaceFolder}/../tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/xtensa-esp32-elf-gcc"
+        "compilerPath": "${workspaceFolder}/external/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/xtensa-esp32-elf-gcc"
       }
     ],
     "version": 4
