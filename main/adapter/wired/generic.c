@@ -15,14 +15,14 @@
 #define GEN_TRIG_MAX_AXES 2
 
 enum {
-    GEN_D_UP = 1,
+    GEN_D_UP = 0,
     GEN_D_DOWN,
     GEN_D_LEFT,
     GEN_D_RIGHT,
 };
 
 enum {
-    GEN_A = 1,
+    GEN_A = 0,
     GEN_B,
     GEN_X,
     GEN_Y,
@@ -65,23 +65,13 @@ static DRAM_ATTR const uint8_t gen_trig_axes_idx[GEN_TRIG_MAX_AXES] = {
 
 static const uint32_t gen_mask[4] = {0xBBFF0FFF, 0x00000000, 0x00000000, BR_COMBO_MASK};
 static const uint32_t gen_desc[4] = {0x110000FF, 0x00000000, 0x00000000, 0x00000000};
-static DRAM_ATTR const uint32_t gen_dpad_mask[32] = {
+static DRAM_ATTR const uint32_t gen_btns_mask[32] = {
     0,                  0,                  0,                  0,
     0,                  0,                  0,                  0,
     BIT(GEN_D_LEFT),    BIT(GEN_D_RIGHT),   BIT(GEN_D_DOWN),    BIT(GEN_D_UP),
     0,                  0,                  0,                  0,
-    0,                  0,                  0,                  0,
-    0,                  0,                  0,                  0,
-    0,                  0,                  0,                  0,
-    0,                  0,                  0,                  0,
-};
-static DRAM_ATTR const uint32_t gen_btns_mask[32] = {
-    0,                  0,                  0,                  0,
-    0,                  0,                  0,                  0,
-    0,                  0,                  0,                  0,
-    0,                  0,                  0,                  0,
     BIT(GEN_X),         BIT(GEN_B),         BIT(GEN_A),         BIT(GEN_Y),
-    BIT(GEN_START),     BIT(GEN_BACK),      0,                  0,
+    BIT(GEN_START),     BIT(GEN_BACK),      BIT(GEN_SYS),       BIT(GEN_MISC),
     0,                  BIT(GEN_LB),        0,                  BIT(GEN_L3),
     0,                  BIT(GEN_RB),        0,                  BIT(GEN_R3),
 };
@@ -128,6 +118,13 @@ void gen_meta_init(struct wired_ctrl *ctrl_data) {
     }
 }
 
+static inline int16_t gen_invert_axis(int16_t axis) {
+    if (axis == INT16_MIN) {
+        return INT16_MAX;
+    }
+    return -axis;
+}
+
 void gen_from_generic(int32_t dev_mode, struct wired_ctrl *ctrl_data, struct wired_data *wired_data) {
     if (!ctrl_data || !wired_data) {
         return;
@@ -137,12 +134,12 @@ void gen_from_generic(int32_t dev_mode, struct wired_ctrl *ctrl_data, struct wir
 
     // Map dpad
     for (uint32_t i = 8; i < 12; i++) {
-        if ((ctrl_data->map_mask[0] & BIT(i)) && gen_dpad_mask[i]) {
+        if ((ctrl_data->map_mask[0] & BIT(i)) && gen_btns_mask[i]) {
             if (ctrl_data->btns[0].value & generic_btns_mask[i]) {
-                map_tmp.dpad |= (uint8_t)gen_dpad_mask[i];
+                map_tmp.dpad |= (uint8_t)gen_btns_mask[i];
                 wired_data->cnt_mask[i] = ctrl_data->btns[0].cnt_mask[i];
             } else {
-                map_tmp.dpad &= ~(uint8_t)gen_dpad_mask[i];
+                map_tmp.dpad &= ~(uint8_t)gen_btns_mask[i];
                 wired_data->cnt_mask[i] = 0;
             }
         }
@@ -161,6 +158,19 @@ void gen_from_generic(int32_t dev_mode, struct wired_ctrl *ctrl_data, struct wir
         }
     }
 
+    // struct raw_fb fb_data = {0};
+    // fb_data.header.wired_id = 0;
+    // fb_data.header.type = FB_TYPE_RUMBLE;
+    // fb_data.header.data_len = 2;
+    // if (map_tmp.buttons & BIT(GEN_A)) {
+    //     fb_data.data[0] = 0xFF;
+    //     fb_data.data[1] = 0xFF;
+    // } else {
+    //     fb_data.data[0] = 0x00;
+    //     fb_data.data[1] = 0x00;
+    // }
+    // adapter_q_fb(&fb_data);
+
     // Map joysticks
     for (uint32_t i = 0; i < GEN_JOY_MAX_AXES; i++) {
         if (ctrl_data->map_mask[0] & (axis_to_btn_mask(i) & ctrl_data->desc[0])) {
@@ -170,6 +180,9 @@ void gen_from_generic(int32_t dev_mode, struct wired_ctrl *ctrl_data, struct wir
                 map_tmp.joy_axes[gen_joy_axes_idx[i]] = gen_axes_meta[i].size_min;
             } else {
                 map_tmp.joy_axes[gen_joy_axes_idx[i]] = ctrl_data->axes[i].value;
+            }
+            if (gen_joy_axes_idx[i] == 1 || gen_joy_axes_idx[i] == 3) {
+                map_tmp.joy_axes[gen_joy_axes_idx[i]] = gen_invert_axis(map_tmp.joy_axes[gen_joy_axes_idx[i]]);
             }
         }
         wired_data->cnt_mask[axis_to_btn_id(i)] = ctrl_data->axes[i].cnt_mask;
@@ -205,7 +218,7 @@ void gen_fb_to_generic(int32_t dev_mode, struct raw_fb *raw_fb_data, struct gene
 
     switch (fb_data->type) {
         case FB_TYPE_RUMBLE:
-            fb_data->state = (raw_fb_data->data[0] || raw_fb_data->data[1] ? 1 : 0);
+            fb_data->state = ((raw_fb_data->data[0] || raw_fb_data->data[1]) ? 1 : 0);
             fb_data->lf_pwr = raw_fb_data->data[0];
             fb_data->hf_pwr = raw_fb_data->data[1];
             break;

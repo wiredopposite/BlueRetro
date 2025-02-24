@@ -259,8 +259,8 @@ void xbox_fb_from_generic(struct generic_fb *fb_data, struct bt_data *bt_data) {
     switch (fb_data->type) {
         case FB_TYPE_RUMBLE:
             if (fb_data->state) {
-                rumble->hf_motor_pwr = fb_data->hf_pwr;
-                rumble->lf_motor_pwr = fb_data->lf_pwr;
+                rumble->hf_motor_pwr = (fb_data->hf_pwr <= 0xFF) ? (fb_data->hf_pwr >> 1) : (0xFF >> 1); // Xbox rumble is 0-127
+                rumble->lf_motor_pwr = (fb_data->lf_pwr <= 0xFF) ? (fb_data->lf_pwr >> 1) : (0xFF >> 1);
             }
             else {
                 rumble->hf_motor_pwr = 0x00;

@@ -49,9 +49,9 @@
 
 struct gen_i2c_in_packet {
     uint8_t len;
+    uint8_t index;
     uint8_t driver;
     uint8_t data[13];
-    uint8_t reserved;
 } __packed;
 
 struct gen_i2c_out_packet {
@@ -128,13 +128,14 @@ static inline void gen_i2c_rx_cb(struct gen_ctrl_port* p, const uint8_t *buffer,
     adapter_q_fb(&fb_data);
 }
 
-static inline uint8_t gen_i2c_tx_cb(struct gen_ctrl_port* p, uint8_t *buffer, uint8_t avilable_len) {
-    if (avilable_len < sizeof(struct gen_i2c_in_packet)) {
+static inline uint8_t gen_i2c_tx_cb(struct gen_ctrl_port* p, uint8_t *buffer, uint8_t available_len) {
+    if (available_len < sizeof(struct gen_i2c_in_packet)) {
         return 0;
     }
     struct gen_i2c_in_packet* packet = (struct gen_i2c_in_packet*)buffer;
     packet->len = sizeof(struct gen_i2c_in_packet);
     packet->driver = 0x01;
+    packet->index = 0x00;
     memcpy(packet->data, wired_adapter.data[p->id].output, sizeof(packet->data));
     return sizeof(struct gen_i2c_in_packet);
 }
@@ -170,8 +171,7 @@ static inline void i2c_irq_handler(void *arg) {
     }
 }
 
-static unsigned isr_dispatch(unsigned cause) {
-    // ets_printf("ISR Dispatch\n");   
+static unsigned isr_dispatch(unsigned cause) { 
     if (cause & I2C0_INTR_MASK) {
         i2c_irq_handler((void *)&gen_ctrl_ports[0]);
     }
@@ -196,8 +196,8 @@ static uint8_t i2c_clk_alloc[] = {
 static i2c_clock_source_t get_clk_src(const uint32_t clk_flags, const uint32_t clk_speed) {
     i2c_clock_source_t clk_srcs[] = SOC_I2C_CLKS;
     for (size_t i = 0; i < sizeof(clk_srcs) / sizeof(clk_srcs[0]); i++) {
-        if (((clk_flags & i2c_clk_alloc[i]) == clk_flags) &&
-                (clk_speed <= (APB_CLK_FREQ / 20))) { // I2C SCL clock frequency should not larger than clock source frequency/20
+        if (((clk_flags & i2c_clk_alloc[i]) == clk_flags) && (clk_speed <= (APB_CLK_FREQ / 20))) { 
+            // I2C SCL clock frequency should not larger than clock source frequency/20
             return clk_srcs[i];
         }
     }
@@ -240,11 +240,9 @@ void gen_i2c_init(uint32_t package) {
         i2c_ll_slave_enable_auto_start(p->hw, true);
         i2c_ll_set_source_clk(p->hw, clk_source);
         i2c_ll_set_slave_addr(p->hw, I2C_ADDR_BASE + i, false);
-        i2c_ll_set_rxfifo_full_thr(p->hw, 28);
+        i2c_ll_set_rxfifo_full_thr(p->hw, 8);
         i2c_ll_set_txfifo_empty_thr(p->hw, 5);
         i2c_ll_set_sda_timing(p->hw, 10, 10);
-        // i2c_ll_rxfifo_rst(p->hw);
-        // i2c_ll_txfifo_rst(p->hw);
         i2c_ll_set_tout(p->hw, 32000);
         i2c_ll_enable_intr_mask(p->hw,  I2C_TRANS_COMPLETE_INT_ENA | 
                                         I2C_RXFIFO_FULL_INT_ENA | 

@@ -53,8 +53,8 @@ static const char *sys_name[WIRED_MAX] = {
     "PARALLEL_1P_OD",
     "PARALLEL_2P_OD",
     "SEA Board",
-    "GENERIC I2C",
-    "GENERIC SPI",
+    "OGX-Mini", /* GENERIC I2C */
+    "OGX-Mini", /* GENERIC SPI */
 };
 
 static const wired_init_t wired_init[WIRED_MAX] = {
