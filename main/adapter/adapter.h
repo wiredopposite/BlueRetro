@@ -91,7 +91,17 @@ enum {
     SEA_BOARD,
     GENERIC_I2C,
     GENERIC_SPI,
+    USB,
     WIRED_MAX,
+};
+
+/* Wired USB device mode ID */
+enum {
+    USB_XINPUT = 0,
+    USB_XBOXOG,
+    USB_DINPUT,
+    USB_SWITCH,
+    USB_WIRED_MAX,
 };
 
 /* Report type ID */
@@ -556,6 +566,8 @@ struct wired_data {
 struct wired_adapter {
     /* from wired driver */
     int32_t system_id;
+    /* from wired driver, used by USB */
+    int32_t usb_system_id;
     void *input_q_hdl;
     /* from adapter */
     int32_t driver_mode;

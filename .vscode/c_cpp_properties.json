@@ -7,7 +7,8 @@
         "includePath": [
           "${workspaceFolder}/build/config",
           "${workspaceFolder}/external/esp-idf/components/**",
-          "${workspaceFolder}/**"
+          "${workspaceFolder}/**",
+          "${workspaceFolder}/components/tud_esp_max3421/**"
         ],
         "defines": ["BLUERETRO", "XT_INTEXC_HOOKS"],
         "browse": {
@@ -18,7 +19,7 @@
           ],
           "limitSymbolsToIncludedHeaders": false
         },
-        "compilerPath": "${workspaceFolder}/external/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/xtensa-esp32-elf-gcc"
+        "compilerPath": "C:/Programming/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc.exe"
       }
     ],
     "version": 4

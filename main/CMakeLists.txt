@@ -86,6 +86,9 @@ set(srcs
     "wired/generic_i2c.c"
     "wired/generic_spi.c"
     "zephyr/atomic.S"
+
+    "usb/usb.c"
+    "usb/drivers/xinput.c"
 )
 
 if(CONFIG_BLUERETRO_WS_CMDS)
@@ -98,6 +101,7 @@ endif()
 idf_component_register(
     SRCS "${srcs}"
     PRIV_INCLUDE_DIRS "."
+    # REQUIRES tud_esp_max3421
     LDFRAGMENTS linker.lf
 )
 

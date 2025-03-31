@@ -28,14 +28,12 @@
 #include "tests/ws_srv.h"
 #include "sdkconfig.h"
 
-#if !defined(CONFIG_BLUERETRO_CHIP_ESP32) && !defined(CONFIG_BLUERETRO_CHIP_ESP32MINI)
-#error "Unsupported chip"
-#endif
-
 #if defined(CONFIG_BLUERETRO_CHIP_ESP32)
 static uint32_t chip_package = EFUSE_RD_CHIP_VER_PKG_ESP32D0WDQ6;
 #elif defined(CONFIG_BLUERETRO_CHIP_ESP32MINI)
 static uint32_t chip_package = EFUSE_RD_CHIP_VER_PKG_ESP32U4WDH;
+#else
+#error "Error: Unsupported chip"
 #endif
 
 static void wired_init_task(void) {

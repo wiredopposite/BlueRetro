@@ -25,6 +25,7 @@
 #include "parallel_2p.h"
 #include "sea.h"
 #include "wii.h"
+#include "usb.h"
 #include "wired.h"
 
 static from_generic_t from_generic_func[WIRED_MAX] = {
@@ -54,6 +55,7 @@ static from_generic_t from_generic_func[WIRED_MAX] = {
     sea_from_generic, /* SEA_BOARD */
     gen_from_generic, /* GENERIC I2C */
     gen_from_generic, /* GENERIC SPI */
+    usb_from_generic, /* USB */
 };
 
 static fb_to_generic_t fb_to_generic_func[WIRED_MAX] = {
@@ -83,6 +85,7 @@ static fb_to_generic_t fb_to_generic_func[WIRED_MAX] = {
     NULL, /* SEA_BOARD */
     gen_fb_to_generic, /* GENERIC I2C */
     gen_fb_to_generic, /* GENERIC SPI */
+    usb_fb_to_generic, /* USB */
 };
 
 static meta_init_t meta_init_func[WIRED_MAX] = {
@@ -112,6 +115,7 @@ static meta_init_t meta_init_func[WIRED_MAX] = {
     sea_meta_init, /* SEA_BOARD */
     gen_meta_init, /* GENERIC I2C */
     gen_meta_init, /* GENERIC SPI */
+    usb_meta_init, /* USB */
 };
 
 static DRAM_ATTR buffer_init_t buffer_init_func[WIRED_MAX] = {
@@ -141,6 +145,7 @@ static DRAM_ATTR buffer_init_t buffer_init_func[WIRED_MAX] = {
     sea_init_buffer, /* SEA_BOARD */
     gen_init_buffer, /* GENERIC I2C */
     gen_init_buffer, /* GENERIC SPI */
+    usb_init_buffer, /* USB */
 };
 
 int32_t wired_meta_init(struct wired_ctrl *ctrl_data) {
