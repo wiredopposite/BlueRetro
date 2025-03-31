@@ -4,3 +4,6 @@
 [submodule "external/esp-idf"]
 	path = external/esp-idf
 	url = https://github.com/espressif/esp-idf.git
+[submodule "components/tinyusb"]
+	path = components/tinyusb
+	url = https://github.com/espressif/tinyusb.git
